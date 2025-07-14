@@ -1,0 +1,17 @@
+[package]
+name = "mbimap"
+version = "0.0.2"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+repository = "https://github.com/fawdlstty/mbimap"
+homepage = "https://github.com/fawdlstty/mbimap"
+description = "Pooled bijective maps in Rust"
+authors = ["fawdlstty<f@fawdlstty.com>"]
+keywords = ["bimap", "pool"]
+categories = []
+readme = "README.md"
+
+[dependencies]
+
+# cargo publish --allow-dirty --registry crates-io

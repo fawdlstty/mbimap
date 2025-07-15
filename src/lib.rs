@@ -5,6 +5,8 @@ use std::hash::Hash;
 pub struct MbiMap<K: Hash, V: Hash> {
     kvs: HashMap<K, HashSet<V>>,
     vks: HashMap<V, HashSet<K>>,
+    empty_k: HashSet<V>,
+    empty_v: HashSet<K>,
 }
 
 impl<K: Debug + Hash, V: Debug + Hash> Debug for MbiMap<K, V> {
@@ -18,6 +20,8 @@ impl<K: Clone + Eq + Hash, V: Clone + Eq + Hash> MbiMap<K, V> {
         Self {
             kvs: HashMap::new(),
             vks: HashMap::new(),
+            empty_k: HashSet::new(),
+            empty_v: HashSet::new(),
         }
     }
 
@@ -49,20 +53,12 @@ impl<K: Clone + Eq + Hash, V: Clone + Eq + Hash> MbiMap<K, V> {
         }
     }
 
-    pub fn get_by_left(&self, k: &K) -> Option<&HashSet<V>> {
-        self.kvs.get(k)
+    pub fn get_by_left(&self, k: &K) -> &HashSet<V> {
+        self.kvs.get(k).unwrap_or(&self.empty_k)
     }
 
-    pub fn get_mut_by_left(&mut self, k: &K) -> Option<&mut HashSet<V>> {
-        self.kvs.get_mut(k)
-    }
-
-    pub fn get_by_right(&self, v: &V) -> Option<&HashSet<K>> {
-        self.vks.get(v)
-    }
-
-    pub fn get_mut_by_right(&mut self, v: &V) -> Option<&mut HashSet<K>> {
-        self.vks.get_mut(v)
+    pub fn get_by_right(&self, v: &V) -> &HashSet<K> {
+        self.vks.get(v).unwrap_or(&self.empty_v)
     }
 
     pub fn remove(&mut self, k: &K, v: &V) {

@@ -57,6 +57,10 @@ impl<K: Clone + Eq + Hash, V: Clone + Eq + Hash> MbiMap<K, V> {
         self.kvs.get_mut(k)
     }
 
+    pub fn get_by_right(&self, v: &V) -> Option<&HashSet<K>> {
+        self.vks.get(v)
+    }
+
     pub fn get_mut_by_right(&mut self, v: &V) -> Option<&mut HashSet<K>> {
         self.vks.get_mut(v)
     }

@@ -111,3 +111,32 @@ impl<K: Clone + Eq + Hash, V: Clone + Eq + Hash> MbiMap<K, V> {
         self.vks.clear();
     }
 }
+
+#[cfg(feature = "serialize")]
+impl<K: Eq + Hash + serde::Serialize, V: Eq + Hash + serde::Serialize> serde::Serialize
+    for MbiMap<K, V>
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        (&self.kvs, &self.vks).serialize(serializer)
+    }
+}
+
+#[cfg(feature = "serialize")]
+impl<
+    'de,
+    K: Clone + Eq + Hash + serde::Deserialize<'de>,
+    V: Clone + Eq + Hash + serde::Deserialize<'de>,
+> serde::Deserialize<'de> for MbiMap<K, V>
+{
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let mut map = MbiMap::new();
+        (map.kvs, map.vks) = serde::Deserialize::deserialize(deserializer)?;
+        Ok(map)
+    }
+}
